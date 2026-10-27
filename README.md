@@ -54,7 +54,6 @@ gom_su_xanh/
 ├── be/                     # Backend Microservices
 ├── fe-admin/               # Frontend dành cho Quản trị viên
 ├── fe-user/                # Frontend dành cho Khách hàng
-├── run-all.ps1             # Script khởi động tự động
 └── README.md
 ```
 
@@ -63,10 +62,10 @@ gom_su_xanh/
 ## 🚀 Hướng dẫn khởi động nhanh
 
 1. **Backend**:
-   - Đảm bảo MySQL đã chạy và tạo đủ các DB cần thiết.
-   - Chạy các service thông qua IDE hoặc script.
+   - Đảm bảo MySQL và RabbitMQ đã chạy, đồng thời cấu hình các biến môi trường cần thiết theo `application.yml` của từng service.
+   - Khởi động `discovery-service` trước, sau đó chạy các service còn lại bằng IDE hoặc `mvn spring-boot:run` trong thư mục service tương ứng.
 2. **Frontend**:
-   - Sử dụng script `run-all.ps1` để khởi động cả BE và FE cùng lúc.
+   - Chạy `npx http-server . -p 3000` từ thư mục gốc dự án.
    - Truy cập `http://localhost:3000` để vào trang người dùng.
    - Truy cập `http://localhost:3000/fe-admin/index.html` để vào trang quản trị.
 
