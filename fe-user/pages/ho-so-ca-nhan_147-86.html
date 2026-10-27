@@ -1,0 +1,1283 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hồ sơ cá nhân — Gốm Sứ Xanh</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../styles-pages.css">
+  <style>
+    .account-page { padding: 64px 48px; max-width: 1280px; margin: 0 auto; }
+    .account-header { text-align: center; margin-bottom: 48px; }
+    .account-layout { display: grid; grid-template-columns: 280px 1fr; gap: 64px; align-items: start; }
+    .account-sidebar { background: var(--clr-cream); border-radius: var(--radius); padding: 32px 24px; box-shadow: 0 4px 20px rgba(28,61,30,.05); position: sticky; top: 100px; }
+    .account-sidebar h2 { font-family: var(--font-heading); font-size: 20px; color: var(--clr-moss); margin-bottom: 24px; text-transform: uppercase; letter-spacing: .05em; border-bottom: 2px solid rgba(148,181,120,.3); padding-bottom: 12px; }
+    .account-menu { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+    .account-menu a { display: block; padding: 12px 16px; text-decoration: none; color: var(--clr-forest); font-weight: 500; border-radius: 8px; transition: all 0.2s; cursor: pointer; }
+    .account-menu a:hover { background: rgba(148,181,120,.15); }
+    .account-menu a.active { background: var(--clr-moss); color: var(--clr-cream); font-weight: 700; }
+    .account-content { background: var(--clr-cream); border-radius: var(--radius); padding: 48px; box-shadow: 0 4px 20px rgba(28,61,30,.05); min-height: 400px; }
+    .tab-panel { display: none; }
+    .tab-panel.is-active { display: block; }
+
+    /* Profile */
+    .profile-info { display: grid; grid-template-columns: auto 1fr; gap: 24px 48px; font-size: 18px; color: var(--clr-forest); }
+    .profile-label { font-weight: 700; }
+    .profile-value { font-weight: 400; }
+    .avatar-wrapper { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; }
+    .avatar-circle { width: 120px; height: 120px; border-radius: 50%; background: rgba(148,181,120,.2); border: 2px dashed var(--clr-sage); display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--clr-forest); margin-bottom: 16px; }
+
+    /* History Table */
+    .content-header { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 2px solid rgba(148,181,120,.2); display: flex; justify-content: space-between; align-items: center; }
+    .content-header h3 { font-family: var(--font-heading); font-size: 24px; color: var(--clr-moss); margin: 0; }
+    .history-table-wrapper { overflow-x: auto; }
+    .history-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .history-table th { background: rgba(148,181,120,.2); color: var(--clr-forest); font-weight: 700; padding: 16px; border: 1px solid rgba(148,181,120,.4); white-space: nowrap; }
+    .history-table td { padding: 20px 16px; border: 1px solid rgba(148,181,120,.4); color: var(--clr-forest); vertical-align: middle; }
+    .history-table tr:hover td { background: rgba(255,255,255,0.5); }
+    .action-btn { display: inline-block; padding: 8px 16px; background: var(--clr-mint); color: var(--clr-forest); border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; transition: all 0.2s; }
+    .action-btn:hover { background: var(--clr-moss); color: var(--clr-cream); }
+
+    /* Address */
+    .address-card { background: rgba(197, 225, 165, 0.3); border: 1px solid rgba(148, 181, 120, 0.4); border-radius: 8px; padding: 24px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; font-size: 18px; color: var(--clr-forest); }
+    .address-row { display: flex; gap: 8px; }
+    .address-label { font-weight: 700; width: 140px; flex-shrink: 0; }
+    .address-value { font-weight: 400; }
+
+    /* Security Form */
+    .security-form { max-width: 500px; margin: 0 auto; }
+    .form-group { margin-bottom: 24px; width: 100%; }
+    .form-input-sec { width: 100%; padding: 16px 20px; border: 1.5px solid var(--clr-clay); border-radius: 8px; background: rgba(255,255,255,0.7); font-size: 16px; color: var(--clr-forest); outline: none; transition: all 0.2s; }
+    .form-input-sec:focus { border-color: var(--clr-teal); box-shadow: 0 0 0 3px rgba(46,125,96,.1); }
+    .security-nav-item:hover { background: var(--clr-moss) !important; color: #fff !important; transform: scale(1.03); }
+    .security-nav-item { transition: all 0.2s ease; }
+
+    /* Logout */
+    .logout-box { text-align: center; padding: 48px 24px; }
+    .logout-box h3 { font-family: var(--font-heading); color: var(--clr-forest); font-size: 28px; margin-bottom: 48px; }
+    .logout-actions { display: flex; justify-content: center; gap: 32px; }
+    .logout-actions .btn-danger { background: #d32f2f; color: #fff; border: 2px solid #d32f2f; padding: 12px 32px; border-radius: 100px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.2s; }
+    .logout-actions .btn-danger:hover { background: #b71c1c; border-color: #b71c1c; }
+    
+    .btn-primary { background: var(--clr-moss); color: var(--clr-cream); border: none; padding: 12px 32px; border-radius: 100px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-primary:hover { background: var(--clr-teal); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--clr-forest); border: 2px solid var(--clr-forest); padding: 10px 30px; border-radius: 100px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-outline:hover { background: var(--clr-forest); color: #fff; }
+
+    @media (max-width: 900px) {
+      .account-layout { grid-template-columns: 1fr; gap: 32px; }
+      .account-page { padding: 32px 20px; }
+      .account-content { padding: 24px; }
+      .profile-info { grid-template-columns: 1fr; gap: 12px; }
+      .address-row { flex-direction: column; gap: 4px; }
+      .logout-actions { flex-direction: column; align-items: center; }
+    }
+    .history-table .status-badge {
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .history-table .status-badge.pending { background: #fff3e0; color: #ef6c00; }
+    .history-table .status-badge.confirmed { background: #e8f5e9; color: #2e7d32; }
+    .history-table .status-badge.cancelled { background: #ffebee; color: #c62828; }
+    .history-table .status-badge.attended { background: #e3f2fd; color: #1565c0; }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      inset: 0;
+      background: rgba(28, 61, 30, 0.6);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .modal.is-active { display: flex; }
+    .modal-content {
+      background: var(--clr-cream);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 700px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 40px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 28px;
+      cursor: pointer;
+      color: var(--clr-forest);
+      opacity: 0.6;
+    }
+    .modal-close:hover { opacity: 1; }
+    .modal-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      color: var(--clr-moss);
+      margin-bottom: 24px;
+      border-bottom: 2px solid rgba(148, 181, 120, 0.3);
+      padding-bottom: 12px;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+      font-size: 16px;
+    }
+    .detail-item-label { font-weight: 700; color: var(--clr-forest); margin-bottom: 4px; }
+    .detail-item-value { color: #555; }
+
+    .order-items-list {
+      border-top: 1px solid rgba(148, 181, 120, 0.3);
+      padding-top: 24px;
+    }
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px dashed rgba(148, 181, 120, 0.2);
+    }
+    .order-item-info { display: flex; flex-direction: column; gap: 4px; }
+    .order-item-name { font-weight: 700; color: var(--clr-forest); }
+    .order-item-qty { font-size: 14px; color: #666; }
+    .order-item-price { font-weight: 700; color: var(--clr-teal); }
+
+    /* Pagination Styles */
+    .pagination-wrap {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .page-link {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: var(--clr-cream);
+      border: 1px solid rgba(148, 181, 120, 0.4);
+      color: var(--clr-forest);
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .page-link:hover { background: rgba(148, 181, 120, 0.2); }
+    .page-link.is-active { background: var(--clr-moss); color: var(--clr-cream); border-color: var(--clr-moss); }
+    
+    /* Password Toggle */
+    .password-input-wrapper { position: relative; width: 100%; }
+    .toggle-password-btn {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--clr-forest);
+      opacity: 0.6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: opacity 0.2s;
+    }
+    .toggle-password-btn:hover { 
+      opacity: 1; 
+      transform: translateY(-50%) scale(1.1) !important;
+    }
+
+    /* Cart Quantity Selector */
+    .cart-qty-selector {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1.5px solid rgba(148, 181, 120, 0.4);
+      border-radius: 100px;
+      width: fit-content;
+      overflow: hidden;
+      background: white;
+      margin-top: 8px;
+    }
+    .cart-qty-selector button {
+      background: transparent;
+      border: none;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--clr-forest);
+      transition: background 0.2s;
+    }
+    .cart-qty-selector button:hover {
+      background: rgba(148, 181, 120, 0.1);
+    }
+    .cart-qty-selector input {
+      width: 40px;
+      height: 32px;
+      border: none;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--clr-forest);
+      background: transparent;
+      outline: none;
+      -moz-appearance: textfield;
+    }
+    .cart-qty-selector input::-webkit-outer-spin-button,
+    .cart-qty-selector input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <main class="page-main">
+    <div class="account-page">
+      <div class="account-header">
+        <h1 class="section-title all-caps">Tài khoản của tôi</h1>
+        <div class="section-title-wrap"></div>
+      </div>
+      
+      <div class="account-layout">
+        <!-- Sidebar -->
+        <aside class="account-sidebar">
+          <h2>Danh mục</h2>
+          <ul class="account-menu" id="accountMenu">
+            <li><a data-tab="profile" class="active">Hồ sơ cá nhân</a></li>
+            <li><a data-tab="cart">Giỏ hàng</a></li>
+            <li><a data-tab="orders">Lịch sử đơn hàng</a></li>
+            <li><a data-tab="history">Lịch sử đăng ký</a></li>
+            <li><a data-tab="security">Bảo mật tài khoản</a></li>
+            <li><a data-tab="logout" style="color: #d32f2f;">Đăng xuất</a></li>
+          </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="account-content">
+
+          <!-- TAB: Hồ sơ -->
+          <div class="tab-panel" id="panel-profile">
+            <div class="profile-info">
+              <div class="profile-label">Họ và tên</div>
+              <div class="profile-value"><input type="text" id="editUsername" class="form-input-sec" style="padding: 8px 12px;"></div>
+              
+              <div class="profile-label">Giới tính</div>
+              <div class="profile-value">
+                <select id="editGender" class="form-input-sec" style="padding: 8px 12px;">
+                  <option value="MALE">Nam</option>
+                  <option value="FEMALE">Nữ</option>
+                  <option value="OTHER">Khác</option>
+                </select>
+              </div>
+              
+              <div class="profile-label">Địa chỉ</div>
+              <div class="profile-value"><input type="text" id="editAddress" class="form-input-sec" style="padding: 8px 12px;" placeholder="Nhập địa chỉ của bạn"></div>
+              
+              <div class="profile-label">Số điện thoại</div>
+              <div class="profile-value"><input type="text" id="editPhone" class="form-input-sec" style="padding: 8px 12px;" placeholder="Nhập số điện thoại"></div>
+              
+              <div class="profile-label">Email</div>
+              <div class="profile-value"><input type="email" id="editEmail" class="form-input-sec" style="padding: 8px 12px;" placeholder="Nhập email" disabled></div>
+            </div>
+            <div style="margin-top: 48px; text-align: center;">
+              <button class="btn-primary" id="saveProfileBtn" style="padding: 12px 48px; border-radius: 100px;">Lưu thay đổi</button>
+            </div>
+          </div>
+
+          <!-- TAB: Giỏ hàng -->
+          <div class="tab-panel" id="panel-cart">
+            <div class="content-header"><h3>Giỏ hàng của bạn</h3></div>
+            <div id="profileCartContainer"><div style="text-align:center;">Đang tải giỏ hàng...</div></div>
+            <div style="margin-top: 32px; border-top: 2px solid rgba(148,181,120,.4); padding-top: 24px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:18px;color:var(--clr-forest);"><span>Tạm tính</span><span id="profileCartSubtotal">0 VNĐ</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:24px;font-weight:700;color:var(--clr-forest);margin-bottom:32px;"><span>Tổng cộng</span><span id="profileCartTotal">0 VNĐ</span></div>
+              <div style="text-align:right;"><a href="thanh-toan.html" class="btn-primary" id="profileCheckoutBtn" style="padding:16px 48px;border-radius:100px;text-decoration:none;display:inline-block;">Thanh toán</a></div>
+            </div>
+          </div>
+
+          <!-- TAB: Lịch sử đăng ký -->
+          <div class="tab-panel" id="panel-history">
+            <div class="content-header"><h3>Lịch sử đăng ký Workshop</h3></div>
+            <div class="history-table-wrapper">
+              <table class="history-table">
+                <thead><tr><th>Tên đơn</th><th>Tên workshop</th><th>Họ và tên</th><th>Số lượng</th><th>Thời gian đăng ký</th><th>Thao tác</th></tr></thead>
+                <tbody id="profileHistoryBody">
+                  <tr><td colspan="6" style="text-align:center;padding:24px;">Đang tải dữ liệu...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="panel-orders">
+            <div class="content-header"><h3>Lịch sử mua hàng</h3></div>
+            <div class="history-table-wrapper">
+              <table class="history-table">
+                <thead><tr><th>Mã đơn</th><th>Ngày đặt</th><th>Tổng tiền</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+                <tbody id="profileOrdersBody">
+                  <tr><td colspan="5" style="text-align:center;padding:24px;">Đang tải dữ liệu...</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="ordersPagination" class="pagination-wrap"></div>
+          </div>
+
+
+          <!-- TAB: Bảo mật -->
+          <div class="tab-panel" id="panel-security" style="min-height: auto;">
+            <div class="content-header"><h3>Thay đổi thông tin đăng nhập</h3></div>
+            <!-- Security Menu -->
+            <div id="security-nav" style="text-align: center; padding: 20px 0; display: flex; flex-direction: column; gap: 16px; align-items: center;">
+               <div class="security-nav-item" onclick="showSecurityForm('email')" style="background: rgba(148, 181, 120, 0.2); color: var(--clr-forest); border: 1px solid rgba(148, 181, 120, 0.4); font-family: var(--font-heading); font-weight: 700; cursor: pointer; font-size: 18px; padding: 14px 40px; border-radius: 50px; transition: all 0.2s; width: 100%; max-width: 350px;">Đổi email đăng nhập</div>
+               <div class="security-nav-item" onclick="showSecurityForm('password')" style="background: rgba(148, 181, 120, 0.2); color: var(--clr-forest); border: 1px solid rgba(148, 181, 120, 0.4); font-family: var(--font-heading); font-weight: 700; cursor: pointer; font-size: 18px; padding: 14px 40px; border-radius: 50px; transition: all 0.2s; width: 100%; max-width: 350px;">Cập nhật mật khẩu</div>
+            </div>
+
+            <!-- Email Change Form -->
+            <div id="email-change-form" class="security-form" style="display:none;">
+               <div class="content-header" style="justify-content:center;"><h3>Đổi email đăng nhập</h3></div>
+               <div class="form-group">
+                 <label class="profile-label">Email hiện tại</label>
+                 <input type="email" class="form-input-sec" id="secCurrentEmail" disabled>
+               </div>
+               <div class="form-group">
+                 <label class="profile-label">Email mới</label>
+                 <div style="display:flex; gap:10px;">
+                    <input type="email" class="form-input-sec" id="secNewEmail" placeholder="Nhập email mới" style="flex:1;">
+                    <button type="button" id="sendEmailOtpBtn" style="padding:0 15px; border-radius:12px; border:none; background:var(--clr-teal); color:#fff; font-weight:700; cursor:pointer; font-size:14px; white-space:nowrap;">Gửi mã</button>
+                 </div>
+               </div>
+               <div class="form-group">
+                 <label class="profile-label">Mã OTP</label>
+                 <input type="text" class="form-input-sec" id="secEmailOtp" placeholder="Nhập mã OTP 6 số">
+               </div>
+               <div style="margin-top:24px; text-align:center; display:flex; gap:12px; justify-content:center;">
+                  <button class="btn-primary" id="updateEmailBtn">Cập nhật</button>
+                  <button class="btn-outline" onclick="showSecurityForm('nav')">Quay lại</button>
+               </div>
+            </div>
+
+            <!-- Password Change Form -->
+            <div id="password-change-form" class="security-form" style="display:none;">
+              <div class="content-header" style="justify-content:center;"><h3>Cập nhật mật khẩu của bạn</h3></div>
+              <div class="form-group">
+                <label class="profile-label" for="secCurrentPw" style="display:block; margin-bottom:8px;">Mật khẩu hiện tại *</label>
+                <div class="password-input-wrapper">
+                  <input type="password" class="form-input-sec" placeholder="Nhập mật khẩu hiện tại" id="secCurrentPw">
+                  <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('secCurrentPw', this)">
+                    <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="profile-label" for="secNewPw" style="display:block; margin-bottom:8px;">Mật khẩu mới *</label>
+                <div class="password-input-wrapper">
+                  <input type="password" class="form-input-sec" placeholder="Nhập mật khẩu mới" id="secNewPw">
+                  <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('secNewPw', this)">
+                    <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="profile-label" for="secConfirmPw" style="display:block; margin-bottom:8px;">Nhập lại mật khẩu mới *</label>
+                <div class="password-input-wrapper">
+                  <input type="password" class="form-input-sec" placeholder="Xác nhận mật khẩu mới" id="secConfirmPw">
+                  <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('secConfirmPw', this)">
+                    <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  </button>
+                </div>
+              </div>
+              <div style="margin-top:24px; text-align:center; display:flex; gap:12px; justify-content:center;">
+                  <button class="btn-primary" id="updatePwBtn">Cập nhật</button>
+                  <button class="btn-outline" onclick="showSecurityForm('nav')">Quay lại</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: Đăng xuất -->
+          <div class="tab-panel" id="panel-logout">
+            <div class="logout-box">
+              <h3>BẠN CÓ CHẮC CHẮN MUỐN ĐĂNG XUẤT?</h3>
+              <div class="logout-actions">
+                <button class="btn-danger" id="logoutConfirmBtn">Đăng xuất</button>
+                <button class="btn-outline" style="padding:12px 32px;border-radius:100px;font-weight:700;cursor:pointer;" id="logoutCancelBtn">Hủy</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Chi tiết Đơn hàng -->
+  <div id="orderDetailModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeOrderModal()">&times;</span>
+      <h2 class="modal-title">Chi tiết đơn hàng #<span id="modalOrderId"></span></h2>
+      
+      <div class="detail-grid">
+        <div>
+          <div class="detail-item-label">Ngày đặt</div>
+          <div class="detail-item-value" id="modalOrderDate">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Trạng thái</div>
+          <div class="detail-item-value" id="modalOrderStatus">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Người nhận</div>
+          <div class="detail-item-value" id="modalOrderName">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Số điện thoại</div>
+          <div class="detail-item-value" id="modalOrderPhone">...</div>
+        </div>
+        <div style="grid-column: span 2;">
+          <div class="detail-item-label">Địa chỉ nhận hàng</div>
+          <div class="detail-item-value" id="modalOrderAddress">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Thanh toán</div>
+          <div class="detail-item-value" id="modalOrderPayment">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Vận chuyển</div>
+          <div class="detail-item-value" id="modalOrderShip">...</div>
+        </div>
+      </div>
+
+      <div class="order-items-list">
+        <h4 style="margin-bottom: 16px; color: var(--clr-forest);">Sản phẩm đã đặt</h4>
+        <div id="modalOrderItemsList">
+          <!-- Items injected here -->
+        </div>
+      </div>
+
+      <div style="margin-top: 24px; border-top: 1px dashed rgba(148, 181, 120, 0.3); padding-top: 16px; display: flex; justify-content: space-between; color: var(--clr-forest); font-size: 16px;">
+        <span>Phí vận chuyển</span>
+        <span id="modalOrderShipFee" style="font-weight: 600;">...</span>
+      </div>
+
+      <div style="margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--clr-moss); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 18px; font-weight: 700; color: var(--clr-forest);">TỔNG CỘNG</span>
+        <span id="modalOrderTotal" style="font-size: 24px; font-weight: 700; color: var(--clr-teal);">...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Chi tiết Đăng ký Workshop -->
+  <div id="workshopRegistrationDetailModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeWorkshopModal()">&times;</span>
+      <h2 class="modal-title">Chi tiết đăng ký workshop <span id="modalWsRegId"></span></h2>
+      
+      <div class="detail-grid">
+        <div style="grid-column: span 2;">
+          <div class="detail-item-label">Tên Workshop</div>
+          <div class="detail-item-value" style="font-weight:700;color:var(--clr-forest);font-size:18px;" id="modalWsName">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Ngày đăng ký</div>
+          <div class="detail-item-value" id="modalWsRegDate">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Khách hàng</div>
+          <div class="detail-item-value" id="modalWsCustomer">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Số điện thoại</div>
+          <div class="detail-item-value" id="modalWsPhone">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Email</div>
+          <div class="detail-item-value" id="modalWsEmail">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Số lượng vé</div>
+          <div class="detail-item-value" id="modalWsQty">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Giá mỗi vé</div>
+          <div class="detail-item-value" id="modalWsPrice">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Trạng thái</div>
+          <div class="detail-item-value" id="modalWsStatus">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Ngày tham gia</div>
+          <div class="detail-item-value" id="modalWsPartDate" style="font-weight:700;color:var(--clr-leaf);">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Giờ tham gia</div>
+          <div class="detail-item-value" id="modalWsPartTime" style="font-weight:700;color:var(--clr-leaf);">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Địa điểm</div>
+          <div class="detail-item-value" id="modalWsLocation">...</div>
+        </div>
+        <div>
+          <div class="detail-item-label">Tổng tiền</div>
+          <div class="detail-item-value" style="font-weight:700;font-size:20px;color:var(--clr-forest);" id="modalWsTotal">...</div>
+        </div>
+        <div style="grid-column: span 2;">
+          <div class="detail-item-label">Ghi chú</div>
+          <div class="detail-item-value" id="modalWsNote" style="background:#f9f9f9;padding:10px;border-radius:4px;min-height:40px;">...</div>
+        </div>
+      </div>
+      
+      <div style="margin-top:24px;text-align:right;">
+        <button class="btn-primary" onclick="closeWorkshopModal()" style="padding:10px 32px;border-radius:100px;">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../app.js" defer></script>
+  <script>
+    function togglePasswordVisibility(inputId, btn) {
+      var input = document.getElementById(inputId);
+      var svg = btn.querySelector('svg');
+      if (input.type === 'password') {
+        input.type = 'text';
+        svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+      } else {
+        input.type = 'password';
+        svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+      }
+    }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var token = localStorage.getItem('gsx_token');
+    if (!token) { alert('Bạn chưa đăng nhập!'); window.location.href = 'dang-nhap_839-134.html'; return; }
+
+    // ===== TAB SYSTEM =====
+    var menuLinks = document.querySelectorAll('#accountMenu a[data-tab]');
+    var panels = document.querySelectorAll('.tab-panel');
+
+    function switchTab(tabName) {
+      menuLinks.forEach(function(a) { a.classList.remove('active'); });
+      panels.forEach(function(p) { p.classList.remove('is-active'); });
+      var link = document.querySelector('#accountMenu a[data-tab="'+tabName+'"]');
+      var panel = document.getElementById('panel-' + tabName);
+      if (link) link.classList.add('active');
+      if (panel) panel.classList.add('is-active');
+      // Lazy-load data for certain tabs
+      if (tabName === 'cart') loadProfileCart();
+      if (tabName === 'history') loadProfileHistory();
+      if (tabName === 'orders') loadProfileOrders(0);
+    }
+
+    menuLinks.forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        switchTab(this.getAttribute('data-tab'));
+        history.replaceState(null, '', '#' + this.getAttribute('data-tab'));
+      });
+    });
+
+    // Handle URL hash on load
+    var hash = window.location.hash.replace('#','');
+    if (hash && document.getElementById('panel-' + hash)) { switchTab(hash); }
+
+    // ===== LOAD PROFILE =====
+    fetch('http://localhost:8080/identity/users/my-infor', {
+      method: 'GET', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
+    })
+    .then(function(res) {
+      if (res.status === 401) { localStorage.removeItem('gsx_token'); localStorage.removeItem('gsx_logged_in'); window.location.href = 'dang-nhap_839-134.html'; throw new Error('Unauthorized'); }
+      return res.json();
+    })
+    .then(function(data) {
+      var user = data.result || data;
+      document.getElementById('editUsername').value = (user.username || '');
+      
+      // Ánh xạ giới tính (Xử lý tương thích nếu DB chứa "Nam/Nữ" thay vì MALE/FEMALE)
+      var genderVal = user.gender || 'MALE';
+      if (genderVal === 'Nam') genderVal = 'MALE';
+      if (genderVal === 'Nữ') genderVal = 'FEMALE';
+      if (genderVal === 'Khác') genderVal = 'OTHER';
+      document.getElementById('editGender').value = genderVal;
+      
+      document.getElementById('editAddress').value = (user.address || '');
+      
+      // Cleanup: Nếu phone bị lỗi chứa "MALE/FEMALE" do bug cũ, để trống để user nhập lại
+      var phoneVal = user.phone || '';
+      if (phoneVal === 'MALE' || phoneVal === 'FEMALE' || phoneVal === 'OTHER') {
+        phoneVal = '';
+      }
+      document.getElementById('editPhone').value = phoneVal;
+      document.getElementById('editEmail').value = (user.email || '');
+      if (document.getElementById('secCurrentEmail')) {
+        document.getElementById('secCurrentEmail').value = (user.email || '');
+      }
+    })
+    .catch(function(err) { console.error('Lỗi khi tải hồ sơ:', err); });
+
+    // ===== UPDATE PROFILE =====
+    document.getElementById('saveProfileBtn').addEventListener('click', function() {
+      var btn = this;
+      var updateData = {
+        username: document.getElementById('editUsername').value.trim(),
+        gender: document.getElementById('editGender').value,
+        address: document.getElementById('editAddress').value.trim(),
+        phone: document.getElementById('editPhone').value.trim()
+      };
+
+      if (!updateData.username || !updateData.phone) {
+        alert('Họ tên và Số điện thoại không được để trống.');
+        return;
+      }
+
+      btn.textContent = 'Đang lưu...';
+      btn.disabled = true;
+
+      fetch('http://localhost:8080/identity/users/my-infor', {
+        method: 'PUT',
+        headers: { 
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(updateData)
+      })
+      .then(function(res) { 
+        return res.json().then(data => ({ status: res.status, body: data }));
+      })
+      .then(function(resObj) {
+        var data = resObj.body;
+        console.log('Update Result:', resObj);
+
+        if (resObj.status === 200 || data.code === 1000 || data.result) {
+          alert('Cập nhật hồ sơ thành công!');
+          // Optionally reload or update UI
+        } else {
+          var errorMsg = data.message || 'Lỗi không xác định';
+          if (data.details && Array.isArray(data.details)) {
+              errorMsg += ": " + data.details.join(', ');
+          }
+          alert('Cập nhật thất bại: ' + errorMsg);
+        }
+      })
+      .catch(function(err) {
+        console.error('Fetch Error:', err);
+        alert('Lỗi kết nối: ' + err.message);
+      })
+      .finally(function() {
+        btn.textContent = 'Lưu thay đổi';
+        btn.disabled = false;
+      });
+    });
+
+    // ===== LOAD CART =====
+    function loadProfileCart() {
+      var container = document.getElementById('profileCartContainer');
+      container.innerHTML = '<div style="text-align:center;">Đang tải giỏ hàng...</div>';
+      fetch('http://localhost:8080/order/cart', { method: 'GET', headers: { 'Authorization': 'Bearer ' + token } })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        var cart = data.result || data;
+        if (data.code === 1000 && data.result) cart = data.result;
+        var items = cart.cartItemsResponse || [];
+        if (items.length === 0) {
+          container.innerHTML = '<div style="text-align:center;padding:32px 0;">Giỏ hàng của bạn đang trống.</div>';
+          document.getElementById('profileCartSubtotal').textContent = '0 VNĐ';
+          document.getElementById('profileCartTotal').textContent = '0 VNĐ';
+          document.getElementById('profileCheckoutBtn').style.display = 'none';
+          return;
+        }
+        document.getElementById('profileCheckoutBtn').style.display = 'inline-block';
+        var totalPriceStr = new Intl.NumberFormat('vi-VN').format(cart.totalPrice || 0) + ' VNĐ';
+        document.getElementById('profileCartSubtotal').textContent = totalPriceStr;
+        document.getElementById('profileCartTotal').textContent = totalPriceStr;
+        var html = '';
+        items.forEach(function(item) {
+          var unitPriceStr = new Intl.NumberFormat('vi-VN').format(item.unitPrice || 0) + ' VNĐ';
+          var priceStr = new Intl.NumberFormat('vi-VN').format(item.subTotal || 0) + ' VNĐ';
+          var imgUrl = item.productImage || '../assets/images/placeholder.jpg';
+          html += '<div style="display:flex;align-items:center;gap:24px;padding-bottom:24px;margin-bottom:24px;border-bottom:1px solid rgba(148,181,120,.2);">'
+            + '<img src="'+imgUrl+'" alt="'+item.productName+'" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">'
+            + '<div style="flex:1;"><h3 style="font-family:var(--font-heading);font-size:18px;color:var(--clr-forest);margin-bottom:4px;">'+item.productName+'</h3>'
+            + '<div style="color:var(--clr-teal);font-weight:700;margin-bottom:8px;">'+unitPriceStr+'</div>'
+            + '<div style="color:rgba(28,61,30,.7);font-size:14px;">Số lượng: '
+            + '  <div class="cart-qty-selector">'
+            + '    <button type="button" class="cart-qty-minus" data-id="'+item.productId+'">&minus;</button>'
+            + '    <input type="number" min="1" value="'+item.quantity+'" data-id="'+item.productId+'" data-max="'+(item.stockQuantity || 99)+'" class="prof-qty-input">'
+            + '    <button type="button" class="cart-qty-plus" data-id="'+item.productId+'">&plus;</button>'
+            + '  </div>'
+            + '</div></div>'
+            + '<div style="text-align:right;"><div style="font-weight:700;color:var(--clr-forest);font-size:16px;margin-bottom:12px;">'+priceStr+'</div>'
+            + '<button class="prof-btn-remove" data-id="'+item.productId+'" style="background:rgba(148,181,120,.2);border:none;padding:8px;border-radius:4px;cursor:pointer;color:var(--clr-forest);display:inline-flex;align-items:center;justify-content:center;">'
+            + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
+            + '</button></div></div>';
+        });
+        container.innerHTML = html;
+        container.querySelectorAll('.prof-btn-remove').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var id = this.getAttribute('data-id');
+            if (confirm('Bạn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+              fetch('http://localhost:8080/order/cart/remove/' + id, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } }).then(function() { loadProfileCart(); });
+            }
+          });
+        });
+        var qtyTimeout;
+        function updateCartQty(productId, newQty) {
+          clearTimeout(qtyTimeout);
+          qtyTimeout = setTimeout(function() {
+            fetch('http://localhost:8080/order/cart/update?productId=' + productId + '&quantity=' + newQty, { 
+              method: 'PUT', 
+              headers: { 'Authorization': 'Bearer ' + token } 
+            }).then(function() { 
+              loadProfileCart(); 
+            });
+          }, 500);
+        }
+
+        container.querySelectorAll('.cart-qty-minus').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var id = this.getAttribute('data-id');
+            var inp = container.querySelector('.prof-qty-input[data-id="'+id+'"]');
+            var val = parseInt(inp.value) || 1;
+            if (val > 1) {
+              inp.value = val - 1;
+              updateCartQty(id, val - 1);
+            }
+          });
+        });
+
+        container.querySelectorAll('.cart-qty-plus').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var id = this.getAttribute('data-id');
+            var inp = container.querySelector('.prof-qty-input[data-id="'+id+'"]');
+            var val = parseInt(inp.value) || 1;
+            var max = parseInt(inp.getAttribute('data-max')) || 99;
+            if (val < max) {
+              inp.value = val + 1;
+              updateCartQty(id, val + 1);
+            } else {
+              alert('Kho chỉ còn ' + max + ' sản phẩm!');
+            }
+          });
+        });
+
+        container.querySelectorAll('.prof-qty-input').forEach(function(inp) {
+          inp.addEventListener('change', function() {
+            var id = this.getAttribute('data-id');
+            var qty = parseInt(this.value);
+            var max = parseInt(this.getAttribute('data-max')) || 99;
+            if (isNaN(qty) || qty < 1) qty = 1;
+            if (qty > max) {
+              alert('Kho chỉ còn ' + max + ' sản phẩm!');
+              qty = max;
+            }
+            this.value = qty;
+            updateCartQty(id, qty);
+          });
+        });
+      })
+      .catch(function(err) { console.error(err); container.innerHTML = '<div style="text-align:center;color:red;">Lỗi tải giỏ hàng.</div>'; });
+    }
+
+    // ===== LOAD HISTORY =====
+    function loadProfileHistory() {
+      var tbody = document.getElementById('profileHistoryBody');
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;">Đang tải dữ liệu...</td></tr>';
+      
+      fetch('http://localhost:8080/workshop/regis-workshops/my-registrations', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        var registrations = data.content || [];
+        if (registrations.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;">Bạn chưa đăng ký workshop nào.</td></tr>';
+          return;
+        }
+        var html = '';
+        registrations.forEach(function(reg) {
+          var regDate = new Date(reg.registrationDate);
+          var regDateStr = regDate.toLocaleDateString('vi-VN') + '<br>' + regDate.getHours() + 'h' + (regDate.getMinutes()<10?'0':'') + regDate.getMinutes();
+
+          // Lấy thông tin ngày giờ tham gia từ các trường mới
+          var partDate = reg.participationDate ? new Date(reg.participationDate).toLocaleDateString('vi-VN') : 'N/A';
+          var partTime = reg.participationTime || 'N/A';
+          var partDateTimeStr = partDate + '<br>' + partTime;
+
+          var actions = '';
+          if (reg.status === 'PENDING') {
+            actions = '<a href="thanh-toan-workshop_1917-3719.html?regId=' + reg.id + '" class="action-btn" style="background:var(--clr-leaf);color:#fff;border:none;margin-right:4px;">Thanh toán</a>';
+          }
+          if (reg.status === 'CONFIRMED') {
+            actions += '<button class="action-btn btn-cancel-reg" data-id="' + reg.id + '" style="background:#f44336;color:#fff;border:none;">Hủy</button>';
+          }
+
+          var workshopStatusMap = {
+            'PENDING': { label: 'Chờ thanh toán', class: 'pending' },
+            'CONFIRMED': { label: 'Đã xác nhận', class: 'confirmed' },
+            'COMPLETED': { label: 'Đã tham gia', class: 'attended' },
+            'CANCELLED': { label: 'Đã hủy', class: 'cancelled' },
+            'ATTENDED': { label: 'Đã tham gia', class: 'attended' }
+          };
+          var st = workshopStatusMap[reg.status] || { label: reg.status, class: '' };
+
+          html += '<tr>'
+            + '<td style="font-weight:700;"><a href="#" onclick="event.preventDefault(); viewWorkshopDetails(' + reg.id + ')" style="color:var(--clr-forest);text-decoration:none;">' + reg.id + '</a></td>'
+            + '<td style="font-weight:700;">' + reg.workshopName + '</td>'
+            + '<td>' + reg.customerName + '</td>'
+            + '<td style="text-align:center;">' + reg.ticketQuantity + '</td>'
+            + '<td>' + regDateStr + '</td>'
+            + '<td style="text-align:center;">'
+            + '  <div style="margin-bottom:8px;"><span class="status-badge ' + st.class + '">' + st.label + '</span></div>'
+            + '  <div style="display:flex;gap:4px;justify-content:center;">' 
+            +      actions 
+            + '  </div>'
+            + '</td>'
+            + '</tr>';
+        });
+        tbody.innerHTML = html;
+
+        // Attach cancel handlers
+        tbody.querySelectorAll('.btn-cancel-reg').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var regId = this.getAttribute('data-id');
+            if (confirm('Bạn có chắc chắn muốn hủy đăng ký này?')) {
+              fetch('http://localhost:8080/workshop/regis-workshops/' + regId + '/cancel', {
+                method: 'PATCH',
+                headers: { 'Authorization': 'Bearer ' + token }
+              })
+              .then(function(res) {
+                if (res.ok) {
+                  alert('Đã hủy đăng ký thành công.');
+                  loadProfileHistory();
+                } else {
+                  return res.text().then(function(text) {
+                    // Workshop service might return plain text or JSON
+                    try {
+                      var data = JSON.parse(text);
+                      alert('Lỗi: ' + (data.message || 'Không thể hủy đăng ký.'));
+                    } catch(e) {
+                      alert('Lỗi: ' + text);
+                    }
+                  });
+                }
+              })
+              .catch(function(err) {
+                alert('Lỗi kết nối: ' + err.message);
+              });
+            }
+          });
+        });
+      })
+      .catch(function(err) {
+        console.error(err);
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:red;padding:24px;">Lỗi tải lịch sử.</td></tr>';
+      });
+    }
+    // ===== LOAD ORDERS =====
+    var ordersPageSize = 5;
+    window.loadProfileOrders = function(page) {
+      var tbody = document.getElementById('profileOrdersBody');
+      var pagination = document.getElementById('ordersPagination');
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;">Đang tải dữ liệu...</td></tr>';
+      pagination.innerHTML = '';
+      
+      fetch('http://localhost:8080/order/orders/my-orders?page=' + page + '&size=' + ordersPageSize, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        var pageData = data.result || data;
+        var orders = pageData.content || (Array.isArray(data) ? data : []);
+        var totalPages = pageData.totalPages || 0;
+        
+        if (orders.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;">Bạn chưa có đơn hàng nào.</td></tr>';
+          return;
+        }
+        var html = '';
+        orders.forEach(function(o) {
+          var date = new Date(o.createdAt).toLocaleDateString('vi-VN');
+          var total = new Intl.NumberFormat('vi-VN').format(o.totalAmount) + ' VNĐ';
+          var statusMap = {
+            'PENDING': { label: 'Chờ xử lý', class: 'pending' },
+            'CONFIRMED': { label: 'Đã xác nhận', class: 'confirmed' },
+            'SHIPPING': { label: 'Đang giao', class: 'attended' },
+            'DELIVERED': { label: 'Đã giao', class: 'confirmed' },
+            'COMPLETED': { label: 'Hoàn thành', class: 'confirmed' },
+            'CANCELLED': { label: 'Đã hủy', class: 'cancelled' }
+          };
+          var st = statusMap[o.status] || { label: o.status, class: '' };
+          
+          var actionsHTML = `<button onclick="viewOrderDetails(${o.id})" class="action-btn" style="border:none;cursor:pointer;margin-right:4px;">Chi tiết</button>`;
+          if (o.status !== 'CANCELLED') {
+            var isDisabled = (o.status !== 'PENDING' && o.status !== 'CONFIRMED');
+            var disabledStyle = isDisabled ? 'opacity:0.5;cursor:not-allowed;background:#ccc;' : 'background:#d32f2f;cursor:pointer;';
+            actionsHTML += `<button onclick="${isDisabled ? '' : `cancelOrder(${o.id})`}" class="action-btn" style="border:none;color:#fff;${disabledStyle}" ${isDisabled ? 'disabled' : ''}>Hủy</button>`;
+          }
+
+          html += '<tr>'
+            + '<td style="font-weight:700;">#' + o.id + '</td>'
+            + '<td>' + date + '</td>'
+            + '<td style="font-weight:700;color:var(--clr-forest);">' + total + '</td>'
+            + '<td><span class="status-badge ' + st.class + '">' + st.label + '</span></td>'
+            + '<td>' + actionsHTML + '</td>'
+            + '</tr>';
+        });
+        tbody.innerHTML = html;
+
+        // Render Pagination
+        if (totalPages > 1) {
+          for (var i = 0; i < totalPages; i++) {
+            var pBtn = document.createElement('a');
+            pBtn.href = '#';
+            pBtn.className = 'page-link' + (i === page ? ' is-active' : '');
+            pBtn.textContent = i + 1;
+            (function(pIndex) {
+              pBtn.onclick = function(e) {
+                e.preventDefault();
+                loadProfileOrders(pIndex);
+              };
+            })(i);
+            pagination.appendChild(pBtn);
+          }
+        }
+      })
+      .catch(function(err) {
+        console.error(err);
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:red;padding:24px;">Lỗi tải lịch sử đơn hàng.</td></tr>';
+      });
+    }
+
+    window.cancelOrder = function(orderId) {
+        if (!confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) return;
+        
+        fetch('http://localhost:8080/order/orders/' + orderId + '/cancel', {
+            method: 'PUT',
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(res => {
+            if (res.ok) {
+                alert('Đã hủy đơn hàng thành công.');
+                loadProfileOrders(0);
+            } else {
+                return res.json().then(data => {
+                    throw new Error(data.message || 'Không thể hủy đơn hàng.');
+                });
+            }
+        })
+        .catch(err => {
+            alert('Lỗi: ' + err.message);
+        });
+    }
+
+    window.viewWorkshopDetails = function(regId) {
+        var modal = document.getElementById('workshopRegistrationDetailModal');
+        modal.classList.add('is-active');
+        document.getElementById('modalWsRegId').textContent = regId;
+        
+        fetch('http://localhost:8080/workshop/regis-workshops/' + regId, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(res => res.json())
+        .then(data => {
+            var reg = data.result || data;
+            document.getElementById('modalWsName').textContent = reg.workshopName;
+            document.getElementById('modalWsRegDate').textContent = new Date(reg.registrationDate).toLocaleString('vi-VN');
+            document.getElementById('modalWsCustomer').textContent = reg.customerName;
+            document.getElementById('modalWsPhone').textContent = reg.customerPhone || '—';
+            document.getElementById('modalWsEmail').textContent = reg.customerEmail || '—';
+            document.getElementById('modalWsQty').textContent = reg.ticketQuantity;
+            document.getElementById('modalWsPrice').textContent = new Intl.NumberFormat('vi-VN').format(reg.pricePerTicket || 0) + ' VNĐ';
+            var workshopStatusMap = {
+                'PENDING': 'Chờ thanh toán',
+                'CONFIRMED': 'Đã xác nhận',
+                'COMPLETED': 'Đã tham gia',
+                'CANCELLED': 'Đã hủy',
+                'ATTENDED': 'Đã tham gia'
+            };
+            document.getElementById('modalWsStatus').textContent = workshopStatusMap[reg.status] || reg.status;
+            document.getElementById('modalWsPartDate').textContent = reg.participationDate ? new Date(reg.participationDate).toLocaleDateString('vi-VN') : 'N/A';
+            document.getElementById('modalWsPartTime').textContent = reg.participationTime || 'N/A';
+            document.getElementById('modalWsLocation').textContent = reg.location || 'Bảo tàng Gốm Bát Tràng';
+            document.getElementById('modalWsTotal').textContent = new Intl.NumberFormat('vi-VN').format(reg.totalPrice) + ' VNĐ';
+            document.getElementById('modalWsNote').textContent = reg.note || 'Không có ghi chú.';
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Lỗi khi tải chi tiết đăng ký.');
+        });
+    }
+
+    window.closeWorkshopModal = function() {
+        document.getElementById('workshopRegistrationDetailModal').classList.remove('is-active');
+    }
+
+    window.viewOrderDetails = function(orderId) {
+        var modal = document.getElementById('orderDetailModal');
+        modal.classList.add('is-active');
+        document.getElementById('modalOrderId').textContent = orderId;
+        document.getElementById('modalOrderItemsList').innerHTML = 'Đang tải chi tiết...';
+
+        fetch('http://localhost:8080/order/orders/' + orderId, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(res => res.json())
+        .then(data => {
+            var o = data.result || data;
+            document.getElementById('modalOrderDate').textContent = new Date(o.createdAt).toLocaleDateString('vi-VN');
+            var orderStatusMap = {
+                'PENDING': 'Chờ xử lý',
+                'CONFIRMED': 'Đã xác nhận',
+                'SHIPPING': 'Đang giao',
+                'DELIVERED': 'Đã giao',
+                'COMPLETED': 'Hoàn thành',
+                'CANCELLED': 'Đã hủy'
+            };
+            document.getElementById('modalOrderStatus').textContent = orderStatusMap[o.status] || o.status;
+            document.getElementById('modalOrderName').textContent = o.customerName || 'Khách hàng';
+            document.getElementById('modalOrderPhone').textContent = o.phoneNumber;
+            document.getElementById('modalOrderAddress').textContent = o.address;
+            document.getElementById('modalOrderPayment').textContent = o.paymentMethod || 'N/A';
+            document.getElementById('modalOrderShip').textContent = o.shippingMethod || 'N/A';
+            document.getElementById('modalOrderShipFee').textContent = new Intl.NumberFormat('vi-VN').format(o.shippingFee || 0) + ' VNĐ';
+            document.getElementById('modalOrderTotal').textContent = new Intl.NumberFormat('vi-VN').format(o.totalAmount) + ' VNĐ';
+
+            var itemsHtml = '';
+            if (o.orderDetails && o.orderDetails.length > 0) {
+                o.orderDetails.forEach(item => {
+                    itemsHtml += `
+                        <div class="order-item-row">
+                            <div class="order-item-info">
+                                <span class="order-item-name">${item.productName}</span>
+                                <span class="order-item-qty">Đơn giá: ${new Intl.NumberFormat('vi-VN').format(item.priceAtPurchase)} VNĐ | Số lượng: ${item.quantity}</span>
+                            </div>
+                            <span class="order-item-price">${new Intl.NumberFormat('vi-VN').format(item.priceAtPurchase * item.quantity)} VNĐ</span>
+                        </div>
+                    `;
+                });
+            } else {
+                itemsHtml = 'Không có thông tin sản phẩm.';
+            }
+            document.getElementById('modalOrderItemsList').innerHTML = itemsHtml;
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('modalOrderItemsList').innerHTML = 'Lỗi khi tải chi tiết đơn hàng.';
+        });
+    }
+
+    window.closeOrderModal = function() {
+        document.getElementById('orderDetailModal').classList.remove('is-active');
+    }
+
+    // ===== LOGOUT =====
+    document.getElementById('logoutConfirmBtn').addEventListener('click', function() {
+      localStorage.removeItem('gsx_logged_in');
+      localStorage.removeItem('gsx_token');
+      window.location.href = 'trang-chu_417-354.html';
+    });
+    document.getElementById('logoutCancelBtn').addEventListener('click', function() {
+      switchTab('profile');
+      history.replaceState(null, '', '#profile');
+    });
+
+    // ===== CHANGE PASSWORD =====
+    document.getElementById('updatePwBtn').addEventListener('click', function() {
+      var cur = document.getElementById('secCurrentPw').value;
+      var nw = document.getElementById('secNewPw').value;
+      var cf = document.getElementById('secConfirmPw').value;
+
+      if (!cur || !nw || !cf) { alert('Vui lòng nhập đầy đủ thông tin.'); return; }
+      if (nw !== cf) { alert('Mật khẩu xác nhận không khớp.'); return; }
+      
+      // Tách từng lỗi validation mật khẩu mới
+      if (nw.length < 8) {
+        alert('Mật khẩu mới phải có ít nhất 8 ký tự.');
+        return;
+      }
+      if (!/[A-Z]/.test(nw)) {
+        alert('Mật khẩu mới phải có ít nhất một chữ cái viết hoa.');
+        return;
+      }
+      if (!/[a-z]/.test(nw)) {
+        alert('Mật khẩu mới phải có ít nhất một chữ cái viết thường.');
+        return;
+      }
+      if (!/[0-9]/.test(nw)) {
+        alert('Mật khẩu mới phải có ít nhất một chữ số.');
+        return;
+      }
+      if (!/[@#$%^&+=!]/.test(nw)) {
+        alert('Mật khẩu mới phải có ít nhất một ký tự đặc biệt (@#$%^&+=!).');
+        return;
+      }
+      if (/\s/.test(nw)) {
+        alert('Mật khẩu không được chứa khoảng trắng.');
+        return;
+      }
+      
+      if (nw === cur) {
+        alert('Mật khẩu mới không được trùng với mật khẩu hiện tại.');
+        return;
+      }
+
+      var btn = this;
+      btn.disabled = true;
+      btn.textContent = 'Đang xử lý...';
+
+      fetch('http://localhost:8080/identity/users/changePassword', {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          oldPassword: cur,
+          newPassword: nw
+        })
+      })
+      .then(function(res) {
+        if (res.status === 400) {
+          return res.json().then(function(data) {
+             throw new Error(data.message || 'Mật khẩu cũ không chính xác hoặc mật khẩu mới không hợp lệ.');
+          });
+        }
+        if (!res.ok) throw new Error('Có lỗi xảy ra khi đổi mật khẩu.');
+        return res.json();
+      })
+      .then(function(data) {
+        alert('Đổi mật khẩu thành công!');
+        document.getElementById('secCurrentPw').value = '';
+        document.getElementById('secNewPw').value = '';
+        document.getElementById('secConfirmPw').value = '';
+      })
+      .catch(function(err) {
+        alert(err.message);
+      })
+      .finally(function() {
+        btn.disabled = false;
+        btn.textContent = 'Cập nhật';
+      });
+    });
+
+    // ===== SECURITY NAVIGATION =====
+    window.showSecurityForm = function(type) {
+      document.getElementById('security-nav').style.display = (type === 'nav') ? 'flex' : 'none';
+      document.getElementById('email-change-form').style.display = (type === 'email') ? 'block' : 'none';
+      document.getElementById('password-change-form').style.display = (type === 'password') ? 'block' : 'none';
+
+      // Ẩn tiêu đề chung khi vào form chi tiết
+      var mainHeader = document.querySelector('#panel-security > .content-header');
+      if (mainHeader) {
+        mainHeader.style.display = (type === 'nav') ? 'flex' : 'none';
+      }
+    }
+
+    // ===== EMAIL UPDATE LOGIC =====
+    document.getElementById('sendEmailOtpBtn').addEventListener('click', function() {
+      var newEmail = document.getElementById('secNewEmail').value.trim();
+      if (!newEmail) { alert('Vui lòng nhập email mới.'); return; }
+      
+      var btn = this;
+      var originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Đang gửi...';
+
+      fetch('http://localhost:8080/identity/users/send-otp?email=' + encodeURIComponent(newEmail) + '&type=UPDATE', {
+        method: 'POST'
+      })
+      .then(res => {
+        if (res.ok) {
+          alert('Mã OTP đã được gửi đến email mới của bạn. Vui lòng kiểm tra!');
+          // Countdown 60s
+          var seconds = 60;
+          var timer = setInterval(function() {
+            seconds--;
+            btn.textContent = 'Gửi lại (' + seconds + 's)';
+            if (seconds <= 0) {
+              clearInterval(timer);
+              btn.disabled = false;
+              btn.textContent = originalText;
+            }
+          }, 1000);
+        } else {
+          alert('Không thể gửi mã OTP. Vui lòng thử lại.');
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Lỗi kết nối.');
+        btn.disabled = false;
+        btn.textContent = originalText;
+      });
+    });
+
+    document.getElementById('updateEmailBtn').addEventListener('click', function() {
+      var newEmail = document.getElementById('secNewEmail').value.trim();
+      var otp = document.getElementById('secEmailOtp').value.trim();
+      
+      if (!newEmail || !otp) { alert('Vui lòng nhập đầy đủ thông tin.'); return; }
+
+      var btn = this;
+      btn.disabled = true;
+      btn.textContent = 'Đang xử lý...';
+
+      fetch('http://localhost:8080/identity/users/changeEmail', {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          newEmail: newEmail,
+          otp: otp
+        })
+      })
+      .then(res => res.json().then(data => ({ status: res.status, body: data })))
+      .then(res => {
+        if (res.status === 200 || res.status === 201) {
+          alert('Cập nhật email thành công!');
+          var result = res.body.result || res.body;
+          if (result.token) {
+            localStorage.setItem('gsx_token', result.token);
+            token = result.token; // Cập nhật biến token toàn cục trong script
+          }
+          // Cập nhật lại UI hiển thị email
+          document.getElementById('editEmail').value = newEmail;
+          document.getElementById('secCurrentEmail').value = newEmail;
+          document.getElementById('secNewEmail').value = '';
+          document.getElementById('secEmailOtp').value = '';
+          showSecurityForm('nav');
+          btn.disabled = false;
+          btn.textContent = 'Cập nhật';
+        } else {
+          alert('Lỗi: ' + (res.body.message || 'Không thể cập nhật email.'));
+          btn.disabled = false;
+          btn.textContent = 'Cập nhật';
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Lỗi kết nối.');
+        btn.disabled = false;
+        btn.textContent = 'Cập nhật';
+      });
+    });
+  });
+  </script>
+</body>
+</html>

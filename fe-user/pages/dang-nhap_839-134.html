@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đăng nhập — Gốm Sứ Xanh</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../styles-pages.css">
+  <style>
+    .login-page {
+      min-height: 100vh;
+      background-image: url('../assets/images/6799477a82bcda0f3d8ceb8313f7b1cef21ffdcd.png');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-page::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(241, 239, 228, .72);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .login-page .nav {
+      background: rgba(255, 253, 246, .92);
+    }
+
+    .login-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      padding-top: calc(var(--nav-h) + 40px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .form-title {
+
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 900;
+      color: var(--clr-teal);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin: 0 0 36px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 16px 22px;
+      border: 1.5px solid var(--clr-clay);
+      border-radius: var(--radius-pill);
+      background: rgba(255, 253, 246, .9);
+
+      font-size: 16px;
+      color: var(--clr-forest);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    .form-input::placeholder {
+      color: #8a9a7a;
+    }
+
+    .form-input:focus {
+      border-color: var(--clr-teal);
+      box-shadow: 0 0 0 4px rgba(46, 125, 96, .1);
+    }
+
+    .form-forgot {
+      display: block;
+      margin: 10px 0 24px;
+      font-size: 15px;
+      color: var(--clr-forest);
+      font-weight: 500;
+    }
+
+    .form-submit {
+      width: 100%;
+      padding: 15px;
+      border: 1.5px solid var(--clr-teal);
+      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--clr-teal);
+      font-family: 'Afacad', Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .25s;
+      letter-spacing: .02em;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, .15);
+    }
+
+    .form-submit:hover {
+      background: var(--clr-teal);
+      color: var(--clr-cream);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .2);
+    }
+
+    .form-submit-solid {
+      background: var(--clr-moss);
+      border-color: var(--clr-moss);
+      color: var(--clr-cream);
+    }
+
+    .form-submit-solid:hover {
+      background: var(--clr-teal);
+      border-color: var(--clr-teal);
+      transform: translateY(-2px);
+    }
+
+    .form-alt {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 15px;
+      color: var(--clr-forest);
+    }
+
+    .form-alt a {
+      color: var(--clr-teal);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .form-alt a:hover {
+      text-decoration: underline;
+    }
+
+    .form-divider {
+      text-align: center;
+      margin: 24px 0 12px;
+      font-size: 15px;
+      color: #7a8a6a;
+    }
+
+    .form-social-title {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--clr-forest);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .form-social-btns {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .form-social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--clr-cream);
+      border: 1.5px solid var(--clr-clay);
+      text-decoration: none;
+      font-size: 26px;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
+    }
+
+    .form-social-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .12);
+    }
+    
+    /* Password Toggle */
+    .password-input-wrapper { position: relative; width: 100%; }
+    .toggle-password-btn {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--clr-forest);
+      opacity: 0.6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: opacity 0.2s;
+    }
+    .toggle-password-btn:hover { 
+      opacity: 1; 
+      transform: translateY(-50%) scale(1.1) !important;
+    }
+
+    /* ===== Forgot Password Modal ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: var(--clr-cream, #fffdf6);
+      border-radius: 20px;
+      padding: 36px 32px;
+      max-width: 440px;
+      width: 90%;
+      box-shadow: 0 24px 48px rgba(0,0,0,.18);
+      position: relative;
+      animation: modalIn .3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(24px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-close {
+      position: absolute;
+      top: 14px; right: 18px;
+      background: none; border: none;
+      font-size: 22px; cursor: pointer;
+      color: var(--clr-forest);
+      opacity: .6;
+      transition: opacity .2s;
+    }
+    .modal-close:hover { opacity: 1; }
+    .modal-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--clr-teal);
+      text-align: center;
+      margin: 0 0 8px;
+    }
+    .modal-desc {
+      text-align: center;
+      font-size: 14px;
+      color: #6a7a5a;
+      margin-bottom: 24px;
+    }
+    .modal-step { display: none; }
+    .modal-step.active { display: block; }
+    .modal-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: var(--radius-pill, 50px);
+      background: var(--clr-teal, #2e7d60);
+      color: #fff;
+      font-family: 'Afacad', Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s;
+      margin-top: 12px;
+    }
+    .modal-btn:hover {
+      background: var(--clr-forest, #1b4332);
+      transform: translateY(-1px);
+    }
+    .modal-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .modal-msg {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 18px;
+    }
+    .modal-msg.error { color: #c0392b; }
+    .modal-msg.success { color: var(--clr-teal); }
+    .modal-back {
+      display: block;
+      margin: 10px auto 0;
+      background: none;
+      border: none;
+      color: var(--clr-forest);
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body class="gsxpage login-page">
+
+  <!-- NAVBAR -->
+  <nav class="gsx-nav">
+    <div class="gsx-nav-inner">
+      <a class="gsx-nav-brand" href="trang-chu_417-354.html">
+        <img src="../assets/images/ea188f8baac92ab0012022a5ea61a0e65d086c2c.png" alt="Logo">
+        <span>GỐM SỨ XANH</span>
+      </a>
+      <div class="gsx-nav-links">
+        <a class="gsx-nav-link" href="trang-chu_417-354.html">Trang chủ</a>
+        <a class="gsx-nav-link" href="ve-chung-toi_1662-3482.html">Về chúng tôi</a>
+        <a class="gsx-nav-link" href="trang-workshop-real_1719-3931.html">Workshop</a>
+        <a class="gsx-nav-link" href="trang-san-pham_945-1348.html">Sản phẩm</a>
+        <a class="gsx-nav-link" href="trang-blog_29-2.html">Blog</a>
+      </div>
+      <div class="gsx-nav-actions">
+        <a class="gsx-nav-btn is-active" href="dang-nhap_839-134.html" id="navAccount" title="Tài khoản">Tài khoản</a>
+        <img class="gsx-nav-flag" src="../assets/images/9b34aad7bad2bbce2089b52760f4970386deffb6.png" alt="VN">
+        <img class="gsx-nav-flag" src="../assets/images/632be14a1b97bffb1dbc6c251283ddff51b3e613.png" alt="EN">
+      </div>
+    </div>
+  </nav>
+
+  <!-- FORM -->
+  <div class="login-wrap">
+    <div class="login-box">
+      <h1 class="form-title">Đăng nhập</h1>
+
+      <div class="form-group">
+        <input class="form-input app-field-native" id="login-email" type="text" placeholder="Email/Số điện thoại"
+          autocomplete="username">
+      </div>
+      <div class="form-group">
+        <div class="password-input-wrapper">
+          <input class="form-input app-field-native" id="login-password" type="password" placeholder="Mật khẩu"
+            autocomplete="current-password">
+          <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('login-password', this)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
+      </div>
+
+      <a class="form-forgot" href="#" id="forgotPasswordLink">Quên mật khẩu?</a>
+
+      <button class="form-submit" id="loginBtn" type="button">Đăng nhập</button>
+
+      <div class="form-alt">
+        Chưa có tài khoản? <a href="dang-ky_147-84.html">Đăng kí ngay!</a>
+      </div>
+
+      <div class="form-divider">hoặc</div>
+      <div class="form-social-title">Đăng nhập bằng</div>
+      <div class="form-social-btns">
+        <a class="form-social-btn" href="http://localhost:8081/oauth2/authorization/google" title="Google">
+          <img src="https://img.icons8.com/color/48/000000/google-logo.png" width="30" alt="Google">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL QUÊN MẬT KHẨU -->
+  <div class="modal-overlay" id="forgotModal">
+    <div class="modal-box">
+      <button class="modal-close" id="forgotModalClose">&times;</button>
+
+      <!-- Bước 1: Nhập email -->
+      <div class="modal-step active" id="forgotStep1">
+        <h2 class="modal-title">Quên mật khẩu</h2>
+        <p class="modal-desc">Nhập email tài khoản của bạn. Chúng tôi sẽ gửi mã OTP để xác thực.</p>
+        <div class="form-group">
+          <input class="form-input" id="forgot-email" type="email" placeholder="Nhập email của bạn">
+        </div>
+        <button class="modal-btn" id="forgotSendOtpBtn">Gửi mã OTP</button>
+        <div class="modal-msg" id="forgotMsg1"></div>
+      </div>
+
+      <!-- Bước 2: Nhập OTP -->
+      <div class="modal-step" id="forgotStep2">
+        <h2 class="modal-title">Nhập mã OTP</h2>
+        <p class="modal-desc">Mã OTP đã được gửi tới email <strong id="forgotEmailDisplay"></strong></p>
+        <div class="form-group">
+          <input class="form-input" id="forgot-otp" type="text" placeholder="Nhập mã OTP (6 số)" maxlength="6">
+        </div>
+        <div class="form-group">
+          <div class="password-input-wrapper">
+            <input class="form-input" id="forgot-new-password" type="password" placeholder="Mật khẩu mới (ít nhất 8 ký tự, có chữ hoa và số)">
+            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('forgot-new-password', this)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="password-input-wrapper">
+            <input class="form-input" id="forgot-confirm-password" type="password" placeholder="Xác nhận mật khẩu mới">
+            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('forgot-confirm-password', this)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+        </div>
+        <button class="modal-btn" id="forgotResetBtn">Đặt lại mật khẩu</button>
+        <button class="modal-back" id="forgotBackBtn">← Quay lại</button>
+        <div class="modal-msg" id="forgotMsg2"></div>
+      </div>
+
+      <!-- Bước 3: Thành công -->
+      <div class="modal-step" id="forgotStep3">
+        <h2 class="modal-title" style="color: var(--clr-moss)">✓ Thành công!</h2>
+        <p class="modal-desc">Mật khẩu của bạn đã được đặt lại thành công.<br>Bạn có thể đăng nhập ngay bây giờ.</p>
+        <button class="modal-btn" id="forgotDoneBtn">Đăng nhập ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../app.js" defer></script>
+  <script>
+    function togglePasswordVisibility(inputId, btn) {
+      var input = document.getElementById(inputId);
+      var svg = btn.querySelector('svg');
+      if (input.type === 'password') {
+        input.type = 'text';
+        svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+      } else {
+        input.type = 'password';
+        svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+      }
+    }
+
+    // Ensure clean state when on login page
+    (function () {
+      localStorage.removeItem('gsx_logged_in');
+      localStorage.removeItem('gsx_token');
+      localStorage.removeItem('adm_token');
+    })();
+
+    // Login through the identity service for all accounts.
+    document.getElementById('loginBtn').addEventListener('click', function () {
+      var email = document.getElementById('login-email').value.trim();
+      var pass = document.getElementById('login-password').value.trim();
+
+      if (!email || !pass) {
+        alert('Vui lòng điền đầy đủ thông tin.');
+        return;
+      }
+
+      var submitBtn = this;
+      var originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Đang xử lý...';
+      submitBtn.disabled = true;
+
+      fetch('http://localhost:8080/identity/auth/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, password: pass })
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.code === 1000 || data.result || data.token) {
+            var tkn = data.result ? data.result.token : data.token;
+            localStorage.setItem('gsx_logged_in', JSON.stringify(true));
+            localStorage.setItem('gsx_token', tkn);
+
+            // Check user role to decide redirect destination
+            fetch('http://localhost:8080/identity/users/my-infor', {
+              headers: { 'Authorization': 'Bearer ' + tkn }
+            })
+              .then(function (r) { return r.json(); })
+              .then(function (user) {
+                var role = (user.roles || '').toUpperCase();
+                if (role === 'ADMIN') {
+                  localStorage.setItem('adm_token', tkn);
+                  window.location.href = '../../fe-admin/index.html';
+                } else {
+                  window.location.href = 'ho-so-ca-nhan_147-86#profile';
+                }
+              })
+              .catch(function () {
+                window.location.href = 'ho-so-ca-nhan_147-86#profile';
+              });
+          } else {
+            // Xử lý lỗi validate từ backend (ví dụ: mật khẩu ko đúng định dạng)
+            var errorMsg = data.message || 'Sai thông tin đăng nhập';
+            if (data.details && Array.isArray(data.details)) {
+              errorMsg = data.details[0]; // Lấy lỗi validate đầu tiên
+            }
+            alert('Đăng nhập thất bại: ' + errorMsg);
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+          }
+        })
+        .catch(function (err) {
+          console.error(err);
+          alert('Lỗi kết nối đến máy chủ.');
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') document.getElementById('loginBtn').click();
+    });
+
+    // ===== QUÊN MẬT KHẨU =====
+    (function() {
+      var modal = document.getElementById('forgotModal');
+      var step1 = document.getElementById('forgotStep1');
+      var step2 = document.getElementById('forgotStep2');
+      var step3 = document.getElementById('forgotStep3');
+      var msg1 = document.getElementById('forgotMsg1');
+      var msg2 = document.getElementById('forgotMsg2');
+      var savedEmail = '';
+
+      function showStep(step) {
+        [step1, step2, step3].forEach(function(s) { s.classList.remove('active'); });
+        step.classList.add('active');
+      }
+
+      function showMsg(el, text, type) {
+        el.textContent = text;
+        el.className = 'modal-msg ' + (type || '');
+      }
+
+      function resetModal() {
+        showStep(step1);
+        document.getElementById('forgot-email').value = '';
+        document.getElementById('forgot-otp').value = '';
+        document.getElementById('forgot-new-password').value = '';
+        document.getElementById('forgot-confirm-password').value = '';
+        msg1.textContent = '';
+        msg2.textContent = '';
+        savedEmail = '';
+      }
+
+      // Mở modal
+      document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        resetModal();
+        modal.classList.add('active');
+      });
+
+      // Đóng modal
+      document.getElementById('forgotModalClose').addEventListener('click', function() {
+        modal.classList.remove('active');
+      });
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) modal.classList.remove('active');
+      });
+
+      // Bước 1: Gửi OTP
+      document.getElementById('forgotSendOtpBtn').addEventListener('click', function() {
+        var email = document.getElementById('forgot-email').value.trim();
+        if (!email) { showMsg(msg1, 'Vui lòng nhập email.', 'error'); return; }
+        
+        var btn = this;
+        btn.disabled = true;
+        btn.textContent = 'Đang gửi...';
+        showMsg(msg1, '', '');
+
+        fetch('http://localhost:8080/identity/users/send-otp?email=' + encodeURIComponent(email) + '&type=RESET_PASSWORD', {
+          method: 'POST'
+        })
+        .then(function(res) {
+          if (!res.ok) throw new Error('Email không tồn tại hoặc lỗi hệ thống');
+          return res.text();
+        })
+        .then(function() {
+          savedEmail = email;
+          document.getElementById('forgotEmailDisplay').textContent = email;
+          showStep(step2);
+          btn.disabled = false;
+          btn.textContent = 'Gửi mã OTP';
+        })
+        .catch(function(err) {
+          showMsg(msg1, err.message || 'Lỗi gửi OTP. Vui lòng thử lại.', 'error');
+          btn.disabled = false;
+          btn.textContent = 'Gửi mã OTP';
+        });
+      });
+
+      // Quay lại bước 1
+      document.getElementById('forgotBackBtn').addEventListener('click', function() {
+        showStep(step1);
+        msg2.textContent = '';
+      });
+
+      // Bước 2: Đặt lại mật khẩu
+      document.getElementById('forgotResetBtn').addEventListener('click', function() {
+        var otp = document.getElementById('forgot-otp').value.trim();
+        var newPass = document.getElementById('forgot-new-password').value;
+        var confirmPass = document.getElementById('forgot-confirm-password').value;
+
+        if (!otp) { showMsg(msg2, 'Vui lòng nhập mã OTP.', 'error'); return; }
+        if (!newPass) { showMsg(msg2, 'Vui lòng nhập mật khẩu mới.', 'error'); return; }
+        if (newPass.length < 8) { showMsg(msg2, 'Mật khẩu phải có ít nhất 8 ký tự.', 'error'); return; }
+        if (!/[A-Z]/.test(newPass)) { showMsg(msg2, 'Mật khẩu phải có ít nhất 1 chữ in hoa.', 'error'); return; }
+        if (!/\d/.test(newPass)) { showMsg(msg2, 'Mật khẩu phải có ít nhất 1 chữ số.', 'error'); return; }
+        if (newPass !== confirmPass) { showMsg(msg2, 'Mật khẩu xác nhận không khớp.', 'error'); return; }
+
+        var btn = this;
+        btn.disabled = true;
+        btn.textContent = 'Đang xử lý...';
+        showMsg(msg2, '', '');
+
+        fetch('http://localhost:8080/identity/users/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: savedEmail, otp: otp, newPassword: newPass })
+        })
+        .then(function(res) {
+          if (!res.ok) return res.text().then(function(t) { throw new Error(t); });
+          return res.text();
+        })
+        .then(function() {
+          showStep(step3);
+          btn.disabled = false;
+          btn.textContent = 'Đặt lại mật khẩu';
+        })
+        .catch(function(err) {
+          var errorMsg = 'Lỗi đặt lại mật khẩu.';
+          try { var parsed = JSON.parse(err.message); errorMsg = parsed.message || errorMsg; } catch(e) { errorMsg = err.message || errorMsg; }
+          showMsg(msg2, errorMsg, 'error');
+          btn.disabled = false;
+          btn.textContent = 'Đặt lại mật khẩu';
+        });
+      });
+
+      // Bước 3: Đóng modal
+      document.getElementById('forgotDoneBtn').addEventListener('click', function() {
+        modal.classList.remove('active');
+        resetModal();
+      });
+    })();
+  </script>
+</body>
+
+</html>
